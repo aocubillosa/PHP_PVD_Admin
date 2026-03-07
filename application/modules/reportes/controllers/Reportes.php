@@ -25,11 +25,11 @@ class Reportes extends CI_Controller {
 	 */
 	public function entrances()
 	{
-		$from = date('Y-m-d') . ' 00:00:00';
-		$to = date('Y-m-d') . ' 23:59:59';
+		$from = date('Y-m-d');
+		$to = date('Y-m-d');
 		$arrParam = array(
-			'from' => $from,
-			'to' => $to
+			'from' => $from . ' 00:00:00',
+			'to' => $to . ' 23:59:59'
 		);
 		$data['listaIngresos'] = $this->reportes_model->get_ingresos($arrParam);
 		$data['noIngresosHOY'] = $data['listaIngresos']?count($data['listaIngresos']):0;
@@ -76,11 +76,11 @@ class Reportes extends CI_Controller {
 	 */
 	public function buscarIngresosFecha()
 	{
-		$data['from'] = $this->input->post('from') . ' 00:00:00';;
-		$data['to'] = $this->input->post('to') . ' 23:59:59';;
+		$data['from'] = $this->input->post('from');
+		$data['to'] = $this->input->post('to');
 		$arrParam = array(
-			'from' => $data['from'],
-			'to' => $data['to']
+			'from' => $data['from'] . ' 00:00:00',
+			'to' => $data['to'] . ' 23:59:59'
 		);
 		$data['listaIngresos'] = $this->reportes_model->get_ingresos($arrParam);
 		$data["view"] ='buscar_ingresos_fecha';
@@ -99,12 +99,12 @@ class Reportes extends CI_Controller {
 			"id" => $this->session->userdata("sede")
 		);
 		$sedes = $this->general_model->get_basic_search($arrParam);
-		$from = $this->input->post('from') . ' 00:00:00';;
-		$to = $this->input->post('to') . ' 23:59:59';;
+		$from = $this->input->post('from');
+		$to = $this->input->post('to');
 		$nombreArchivo = 'reporte_asistencias_' . $from . '_' . $to . '.xlsx';
 		$arrParam = array(
-			'from' => $from,
-			'to' => $to
+			'from' => $from . ' 00:00:00',
+			'to' => $to . ' 23:59:59'
 		);
 		$listaIngresos = $this->reportes_model->get_ingresos($arrParam);
 		$spreadsheet = new Spreadsheet();
@@ -223,12 +223,12 @@ class Reportes extends CI_Controller {
             "id" => $this->session->userdata("sede")
         );
         $sedes = $this->general_model->get_basic_search($arrParam);
-        $from = $this->input->post('from') . ' 00:00:00';;
-        $to = $this->input->post('to') . ' 23:59:59';;
+        $from = $this->input->post('from');
+        $to = $this->input->post('to');
         $nombreArchivo = 'reporte_asistencias_' . $from . '_' . $to . '.pdf';
         $arrParam = array(
-            'from' => $from,
-            'to' => $to
+            'from' => $from . ' 00:00:00',
+            'to' => $to . ' 23:59:59'
         );
         $listaIngresos = $this->reportes_model->get_ingresos($arrParam);
         $this->load->library('Pdf');
