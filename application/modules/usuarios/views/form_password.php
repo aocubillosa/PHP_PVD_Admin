@@ -3,18 +3,20 @@
 <div id="page-wrapper">
 	<br>
 	<div class="row">
-		<div class="col-md-12">
+		<div class="col-md-2"></div>
+		<div class="col-md-8">
 			<div class="panel panel-primary">
 				<div class="panel-heading">
 					<h4 class="list-group-item-heading">
-						<i class="fa fa-child fa-fw"></i> Hola <?php echo $information[0]["first_name"]; ?>
+						<i class="fa fa-user fa-fw"></i> Hola <?php echo $information[0]["first_name"] . ' ' . $information[0]["last_name"]; ?>
 					</h4>
 				</div>
 			</div>
 		</div>				
 	</div>
 	<div class="row">
-		<div class="col-lg-12">
+		<div class="col-md-2"></div>
+		<div class="col-lg-8">
 			<div class="panel panel-default">
 				<div class="panel-heading">
 					<i class="fa fa-unlock"></i> CAMBIAR CONTRASEÑA
@@ -53,7 +55,7 @@
 							</div>
 						</div>
 						<div class="form-group">
-							<label class="col-sm-4 control-label" for="inputConfirm">Confirmar contraseña: *</label>
+							<label class="col-sm-4 control-label" for="inputConfirm">Confirmar Contraseña: *</label>
 							<div class="col-sm-5">
 								<input type="password" id="inputConfirm" name="inputConfirm" class="form-control" >
 							</div>
