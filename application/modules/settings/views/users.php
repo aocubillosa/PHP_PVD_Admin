@@ -63,7 +63,7 @@
 						<thead>
 							<tr>
 								<th class="text-center">Tipo Documento</th>
-								<th class="text-center">No. Documento</th>
+								<th class="text-center">N° Documento</th>
 								<th class="text-center">Nombres</th>
 								<th class="text-center">Apellidos</th>
 								<th class="text-center">Usuario</th>

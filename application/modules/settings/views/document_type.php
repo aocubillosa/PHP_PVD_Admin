@@ -7,7 +7,7 @@
 			<div class="panel panel-primary">
 				<div class="panel-heading">
 					<h4 class="list-group-item-heading">
-					<i class="fa fa-university fa-fw"></i> TIPO DOCUMENTO
+					<i class="fa fa-cc fa-fw"></i> TIPO DOCUMENTO
 					</h4>
 				</div>
 			</div>

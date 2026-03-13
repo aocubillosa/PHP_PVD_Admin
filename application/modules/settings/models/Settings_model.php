@@ -155,6 +155,104 @@ class Settings_model extends CI_Model {
 	}
 
 	/**
+	 * Verificar Inventario
+	 */
+	public function verifyInventory($arrData)
+	{
+		$this->db->select();
+		if (array_key_exists("idInventario", $arrData)) {
+			$this->db->where('id_inventario !=', $arrData["idInventario"]);
+		}
+		$this->db->where($arrData["column"], $arrData["value"]);
+		$query = $this->db->get("inventario");
+		if ($query->num_rows() > 0) {
+			return true;
+		} else { 
+			return false; 
+		}
+	}
+
+	/**
+	 * Add/Edit Inventario
+	 */
+	public function saveInventory()
+	{
+		$idUser = $this->session->userdata("id");
+		$idInventario = $this->input->post('hddId');
+		if (!empty($this->input->post('fecha_servicio'))) {
+			$fecha_servicio = $this->input->post('fecha_servicio');
+		} else {
+			$fecha_servicio = NULL;
+		}
+		$data = array(
+			'fk_id_elemento' => $this->input->post('elemento'),
+			'descripcion' => $this->input->post('descripcion'),
+			'fk_id_user' => $idUser,
+			'fk_id_marca' => $this->input->post('marca'),
+			'placa' => $this->input->post('placa'),
+			'fecha_ingreso' => $this->input->post('fecha_ingreso'),
+			'fecha_servicio' => $fecha_servicio,
+			'valor' => $this->input->post('valor'),
+			'fk_id_estado' => $this->input->post('estado')
+		);
+		if ($idInventario == '') {
+			$query = $this->db->insert('inventario', $data);
+		} else {
+			$this->db->where('id_inventario', $idInventario);
+			$query = $this->db->update('inventario', $data);
+		}
+		if ($query) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	/**
+	 * Add/Edit Elemento
+	 */
+	public function saveElement()
+	{
+		$idElemento = $this->input->post('hddId');
+		$data = array(
+			'elemento' => $this->input->post('elemento')
+		);
+		if ($idElemento == '') {
+			$query = $this->db->insert('param_elementos', $data);
+		} else {
+			$this->db->where('id_elemento', $idElemento);
+			$query = $this->db->update('param_elementos', $data);
+		}
+		if ($query) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	/**
+	 * Add/Edit Marca
+	 */
+	public function saveMark()
+	{
+		$idMarca = $this->input->post('hddId');
+		$data = array(
+			'marca' => $this->input->post('marca')
+		);
+		if ($idMarca == '') {
+			$query = $this->db->insert('param_marcas', $data);
+		} else {
+			$this->db->where('id_marca', $idMarca);
+			$query = $this->db->update('param_marcas', $data);
+		}
+		if ($query) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	/**
 	 * Add/Edit Ocupacion
 	 */
 	public function saveOccupation()

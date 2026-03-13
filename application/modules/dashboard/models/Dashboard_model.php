@@ -12,4 +12,15 @@ class Dashboard_model extends CI_Model {
 		$visitantes = $this->db->count_all_results('permisos P');
 		return $visitantes;
 	}
+
+	/**
+	 * Consulta Elementos Inventario
+	 */
+	public function elementos_inventario()
+	{
+		$idUser = $this->session->userdata("id");
+		$this->db->where('I.fk_id_user', $idUser);
+		$inventario = $this->db->count_all_results('inventario I');
+		return $inventario;
+	}
 }

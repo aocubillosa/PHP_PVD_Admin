@@ -82,7 +82,7 @@
                             <i class="fa fa-desktop fa-5x"></i>
                         </div>
                         <div class="col-xs-9 text-right">
-                            <div class="huge">0</div>
+                            <div class="huge"><?php echo $inventario; ?></div>
                             <div>INVENTARIO</div>
                         </div>
                     </div>
@@ -94,7 +94,7 @@
 
 <script>
     $('#panel-visitantes').click(function() {
-        var url = base_url + "entrances/permissionsVisitantes";
+        var url = base_url + "entrances/incomesVisitantes";
         $(location).attr("href", url);
     });
     $('#panel-inventario').click(function() {

@@ -1,4 +1,4 @@
-<script type="text/javascript" src="<?php echo base_url("assets/js/validate/entrances/incomes.js"); ?>"></script>
+<script type="text/javascript" src="<?php echo base_url("assets/js/validate/settings/elements.js"); ?>"></script>
 
 <div id="page-wrapper">
 	<br>
@@ -7,7 +7,7 @@
 			<div class="panel panel-primary">
 				<div class="panel-heading">
 					<h4 class="list-group-item-heading">
-					<i class="fa fa-qrcode fa-fw"></i> VISITANTES - INGRESOS
+					<i class="fa fa-desktop fa-fw"></i> ELEMENTOS
 					</h4>
 				</div>
 			</div>
@@ -17,7 +17,14 @@
 		<div class="col-lg-12">
 			<div class="panel panel-default">
 				<div class="panel-heading">
-					<i class="fa fa-list"></i> Lista de Ingresos de Visitantes
+					<i class="fa fa-list"></i> Lista de Elementos
+					<div class="pull-right">
+						<div class="btn-group">
+							<button type="button" class="btn btn-success btn-xs" data-toggle="modal" data-target="#modal" id="x">
+								Adicionar Elemento <span class="fa fa-plus" aria-hidden="true"></span>
+							</button>
+						</div>
+					</div>
 				</div>
 				<div class="panel-body">
 					<?php
@@ -39,7 +46,7 @@
 							</div>
 					<?php
 						}
-						if(!$infoVisitantes){ 
+						if(!$elemento){
 							echo '<div class="col-lg-12">
 									<p class="text-danger"><span class="fa fa-exclamation-triangle" aria-hidden="true"></span> No hay registros en el sistema.</p>
 								</div>';
@@ -48,28 +55,22 @@
 					<table width="100%" class="table table-striped table-bordered table-hover small" id="dataTables">
 						<thead>
 							<tr>
-								<th class="text-center">N° Documento</th>
-								<th class="text-center">Tipo Documento</th>
-								<th class="text-center">Nombre Visitante</th>
-								<th class="text-center">Ocupación</th>
-								<th class="text-center">Celular</th>
-								<th class="text-center">Asistencia</th>
+								<th class="text-center">Elemento</th>
+								<th class="text-center">Opciones</th>
 							</tr>
 						</thead>
 						<tbody>
 						<?php
-							foreach ($infoVisitantes as $lista):
+							foreach ($elemento as $lista):
 								echo "<tr>";
-								echo "<td class='text-right'>" . $lista['numero_documento'] . "</td>";
-								echo "<td>" . $lista['tipo_documento'] . "</td>";
-								echo "<td>" . $lista['nombres'] . ' ' . $lista['apellidos'] . "</td>";
-								echo "<td>" . $lista['ocupacion'] . "</td>";
-								echo "<td>" . $lista['telefono'] . "</td>";
-								echo "</td>";
+								echo "<td>" . $lista['elemento'] . "</td>";
 								echo "<td class='text-center'>";
 								?>
-									<button type="button" id="<?php echo $lista['id_visitante']; ?>" class="btn btn-success btn-xs" <?php if ($lista['ingreso']) { ?> disabled <?php } ?>>
-										Ingreso <i class="fa fa-sign-in"></i>
+									<button type="button" class="btn btn-success btn-xs" data-toggle="modal" data-target="#modal" id="<?php echo $lista['id_elemento']; ?>" >
+										Editar <span class="fa fa-pencil-square-o" aria-hidden="true">
+									</button>&nbsp;&nbsp;&nbsp;
+									<button type="button" id="<?php echo $lista['id_elemento']; ?>" class='btn btn-danger btn-xs'>
+										Eliminar <i class="fa fa-trash-o"></i>
 									</button>
 								<?php
 								echo "</td>";
@@ -81,6 +82,13 @@
 				<?php } ?>
 				</div>
 			</div>
+		</div>
+	</div>
+</div>
+
+<div class="modal fade text-center" id="modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">    
+	<div class="modal-dialog modal-lg" role="document">
+		<div class="modal-content" id="tablaDatos">
 		</div>
 	</div>
 </div>

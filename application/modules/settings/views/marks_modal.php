@@ -1,20 +1,20 @@
-<script type="text/javascript" src="<?php echo base_url("assets/js/validate/settings/document_type.js"); ?>"></script>
+<script type="text/javascript" src="<?php echo base_url("assets/js/validate/settings/marks.js"); ?>"></script>
 
 <div class="modal-header">
 	<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-	<h4 class="modal-title" id="exampleModalLabel">Formulario de Tipo de Documento
-		<br><small>Adicionar/Editar Tipo de Documento</small>
+	<h4 class="modal-title" id="exampleModalLabel">Formulario de Marca
+		<br><small>Adicionar/Editar Marca</small>
 	</h4>
 </div>
 <div class="modal-body">
 	<p class="text-danger text-left">Los campos con * son obligatorios.</p>
 	<form name="form" id="form" role="form" method="post" >
-		<input type="hidden" id="hddId" name="hddId" value="<?php echo $information?$information[0]["id_tipo_documento"]:""; ?>"/>
+		<input type="hidden" id="hddId" name="hddId" value="<?php echo $information?$information[0]["id_marca"]:""; ?>"/>
 		<div class="row">
 			<div class="col-sm-12">
 				<div class="form-group text-left">
-					<label class="control-label" for="tipoDoc">Tipo de Documento: *</label>
-					<input type="text" id="tipoDoc" name="tipoDoc" class="form-control" value="<?php echo $information?$information[0]["tipo_documento"]:""; ?>" placeholder="Tipo de Documento" required >
+					<label class="control-label" for="marca">Marca: *</label>
+					<input type="text" id="marca" name="marca" class="form-control" value="<?php echo $information?$information[0]["marca"]:""; ?>" placeholder="Marca" required >
 				</div>
 			</div>
 		</div>

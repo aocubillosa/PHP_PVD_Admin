@@ -26,6 +26,8 @@ class Dashboard extends CI_Controller {
 		$data['sedes'] = $this->general_model->get_basic_search($arrParam);
 		$visitantes = $this->dashboard_model->permisos_visitantes();
 		$data['visitantes'] = $visitantes;
+		$inventario = $this->dashboard_model->elementos_inventario();
+		$data['inventario'] = $inventario;
 		$data["view"] = "dashboard";
 		$this->load->view("layout_calendar", $data);
 	}

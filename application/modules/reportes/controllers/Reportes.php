@@ -203,6 +203,7 @@ class Reportes extends CI_Controller {
 			    ]
 		    ]
 		);
+		$spreadsheet->getActiveSheet()->setSelectedCell('A2');
 		ob_end_clean();
 		header('Content-Type:application/vnd.ms-excel');
 		header('Content-Disposition:attachment;filename=' . $nombreArchivo);
@@ -323,4 +324,117 @@ class Reportes extends CI_Controller {
         $pdf->Output($nombreArchivo, 'D');
         exit;
     }
+
+    /**
+	 * Generar Reporte Inventario XLS
+	 */
+    public function inventory()
+	{
+		$nombreArchivo = 'reporte_inventario.xlsx';
+		$idUser = $this->session->userdata("id");
+		$arrParam = array(
+			"idUser" => $idUser
+		);
+		$listaInventario = $this->reportes_model->get_inventario($arrParam);
+		$spreadsheet = new Spreadsheet();
+		$spreadsheet->setActiveSheetIndex(0);
+		$spreadsheet->getActiveSheet()->setTitle('Reporte Inventario');
+		$img1 = new \PhpOffice\PhpSpreadsheet\Worksheet\Drawing();
+		$img1->setPath('images/alcaldia_logo.png');
+		$img1->setCoordinates('A1');
+		$img1->setOffsetX(0);
+		$img1->setOffsetY(0);
+		$img1->setWorksheet($spreadsheet->getActiveSheet());
+		$img1->setWidth(600);
+		$img1->setHeight(150);
+		$img2 = new \PhpOffice\PhpSpreadsheet\Worksheet\Drawing();
+		$img2->setPath('images/pvd_logo.jpg');
+		$img2->setCoordinates('E1');
+		$img2->setOffsetX(0);
+		$img2->setOffsetY(0);
+		$img2->setWorksheet($spreadsheet->getActiveSheet());
+		$img1->setWidth(500);
+		$img1->setHeight(150);
+		$spreadsheet->getActiveSheet()->mergeCells('A1:D1');
+		$spreadsheet->getActiveSheet()->mergeCells('E1:H1');
+		$spreadsheet->getActiveSheet()->mergeCells('A2:H2');
+		$spreadsheet->getActiveSheet(0)
+							->setCellValue('A2', 'INVENTARIO: ' . strtoupper($listaInventario[0]['first_name'] . ' ' . $listaInventario[0]['last_name']));
+		$spreadsheet->getActiveSheet(0)
+							->setCellValue('A3', 'ELEMENTO')
+							->setCellValue('B3', 'DESCRIPCIÓN')
+							->setCellValue('C3', 'MARCA')
+							->setCellValue('D3', 'PLACA')
+							->setCellValue('E3', 'FECHA INGRESO')
+							->setCellValue('F3', 'FECHA SERVICIO')
+							->setCellValue('G3', 'VALOR')
+							->setCellValue('H3', 'ESTADO');
+		$i = 1;
+		$j = 4;
+		if($listaInventario){
+			foreach ($listaInventario as $lista):
+				$spreadsheet->getActiveSheet()->getStyle('H'.$j)->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
+				$spreadsheet->getActiveSheet()->getStyle('E'.$j.':F'.$j)->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
+				$spreadsheet->getActiveSheet()
+							->setCellValue('A'.$j, $lista['elemento'])
+							->setCellValue('B'.$j, $lista['descripcion'])
+							->setCellValue('C'.$j, $lista['marca'])
+							->setCellValue('D'.$j, $lista['placa'])
+							->setCellValue('E'.$j, $lista['fecha_ingreso'])
+							->setCellValue('F'.$j, $lista['fecha_servicio'])
+							->setCellValue('G'.$j, $lista['valor'])
+							->setCellValue('H'.$j, $lista['estado']);
+				$i++;
+				$j++;
+			endforeach;
+		}
+		$spreadsheet->getActiveSheet()->getStyle('G4:G' . ($j-1))->getNumberFormat()
+        ->setFormatCode('$ #,##0');
+		// Set column widths
+		$spreadsheet->getActiveSheet()->getColumnDimension('A')->setWidth(20);
+		$spreadsheet->getActiveSheet()->getColumnDimension('B')->setWidth(40);
+		$spreadsheet->getActiveSheet()->getColumnDimension('C')->setWidth(20);
+		$spreadsheet->getActiveSheet()->getColumnDimension('D')->setWidth(10);
+		$spreadsheet->getActiveSheet()->getColumnDimension('E')->setWidth(15);
+		$spreadsheet->getActiveSheet()->getColumnDimension('F')->setWidth(15);
+		$spreadsheet->getActiveSheet()->getColumnDimension('G')->setWidth(15);
+		$spreadsheet->getActiveSheet()->getColumnDimension('H')->setWidth(15);
+		// Set fonts
+		$spreadsheet->getActiveSheet()->getStyle('A2:H2')->getFont()->setSize(14);
+		$spreadsheet->getActiveSheet()->getStyle('A2:H2')->getFont()->setBold(true);
+ 		$spreadsheet->getActiveSheet()->getStyle('A2:H2')->getFill()->setFillType(Fill::FILL_SOLID);
+ 		$spreadsheet->getActiveSheet()->getStyle('A2:H2')->getFill()->getStartColor()->setARGB('808080');
+ 		$spreadsheet->getActiveSheet()->getStyle('A2:H2')->getFont()->getColor()->setARGB(\PhpOffice\PhpSpreadsheet\Style\Color::COLOR_WHITE);
+		$spreadsheet->getActiveSheet()->getStyle('A2:H2')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
+		$spreadsheet->getActiveSheet()->getStyle('A2:H2')->getAlignment()->setVertical(\PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER);
+		$spreadsheet->getActiveSheet()->getStyle('A3:H3')->getFont()->setSize(11);
+		$spreadsheet->getActiveSheet()->getStyle('A3:H3')->getFont()->setBold(true);
+ 		$spreadsheet->getActiveSheet()->getStyle('A3:H3')->getFill()->setFillType(Fill::FILL_SOLID);
+ 		$spreadsheet->getActiveSheet()->getStyle('A3:H3')->getFill()->getStartColor()->setARGB('808080');
+ 		$spreadsheet->getActiveSheet()->getStyle('A3:H3')->getFont()->getColor()->setARGB(\PhpOffice\PhpSpreadsheet\Style\Color::COLOR_WHITE);
+		$spreadsheet->getActiveSheet()->getStyle('A3:H3')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
+		$spreadsheet->getActiveSheet()->getStyle('A3:H3')->getAlignment()->setVertical(\PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER);
+		$spreadsheet->getActiveSheet()->getRowDimension('1')->setRowHeight(150);
+		$spreadsheet->getActiveSheet()->getStyle('A2:H2')->applyFromArray(
+		    [
+		        'borders' => [
+		            'allBorders' => ['borderStyle' => Border::BORDER_THIN],
+		        ],
+		    ]
+		);
+		$spreadsheet->getActiveSheet()->getStyle('A1:H1')->applyFromArray(
+		    [
+			    'alignment' => [
+			        'wrapText' => TRUE
+			    ]
+		    ]
+		);
+		$spreadsheet->getActiveSheet()->setSelectedCell('A2');
+		ob_end_clean();
+		header('Content-Type:application/vnd.ms-excel');
+		header('Content-Disposition:attachment;filename=' . $nombreArchivo);
+		$writer = new Xlsx($spreadsheet);
+		$writer->save('php://output');
+		exit;
+	}
 }

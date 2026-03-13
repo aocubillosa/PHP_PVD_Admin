@@ -14,7 +14,7 @@
 			<div class="col-sm-12">
 				<div class="form-group text-left">
 					<label class="control-label" for="sede">Sede: *</label>
-					<input type="text" id="sede" name="sede" class="form-control" value="<?php echo $information?$information[0]["nombre_sede"]:""; ?>" placeholder="Ocupación" required >
+					<input type="text" id="sede" name="sede" class="form-control" value="<?php echo $information?$information[0]["nombre_sede"]:""; ?>" placeholder="Sede" required >
 				</div>
 			</div>
 		</div>

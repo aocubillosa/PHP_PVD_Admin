@@ -21,4 +21,26 @@ class Reportes_model extends CI_Model {
 			return false;
 		}
 	}
+
+	public function get_inventario($arrData)
+	{
+		$this->db->select();
+		$this->db->join('usuarios U', 'U.id_user = I.fk_id_user', 'INNER');
+		$this->db->join('param_elementos E', 'E.id_elemento = I.fk_id_elemento', 'INNER');
+		$this->db->join('param_marcas M', 'M.id_marca = I.fk_id_marca', 'INNER');
+		$this->db->join('param_estados S', 'S.id_estado = I.fk_id_estado', 'INNER');
+		if (array_key_exists("idInventario", $arrData)) {
+			$this->db->where('I.id_inventario', $arrData["idInventario"]);
+		}
+		if (array_key_exists("idUser", $arrData)) {
+			$this->db->where('I.fk_id_user', $arrData["idUser"]);
+		}
+		$this->db->order_by("E.elemento, I.descripcion, I.placa", "ASC");
+		$query = $this->db->get("inventario I");
+		if ($query->num_rows() > 0) {
+			return $query->result_array();
+		} else{
+			return false;
+		}
+	}
 }

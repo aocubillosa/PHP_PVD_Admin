@@ -48,7 +48,7 @@
 					<table width="100%" class="table table-striped table-bordered table-hover small" id="dataTables">
 						<thead>
 							<tr>
-								<th class="text-center">No. Documento</th>
+								<th class="text-center">N° Documento</th>
 								<th class="text-center">Tipo Documento</th>
 								<th class="text-center">Nombre Visitante</th>
 								<th class="text-center">Ocupación</th>

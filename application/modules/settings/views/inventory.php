@@ -1,4 +1,4 @@
-<script type="text/javascript" src="<?php echo base_url("assets/js/validate/settings/visitors.js"); ?>"></script>
+<script type="text/javascript" src="<?php echo base_url("assets/js/validate/settings/inventory.js"); ?>"></script>
 
 <div id="page-wrapper">
 	<br>
@@ -7,7 +7,7 @@
 			<div class="panel panel-primary">
 				<div class="panel-heading">
 					<h4 class="list-group-item-heading">
-					<i class="fa fa-user fa-fw"></i> VISITANTES
+					<i class="fa fa-desktop fa-fw"></i> INVENTARIO
 					</h4>
 				</div>
 			</div>
@@ -17,23 +17,16 @@
 		<div class="col-lg-12">
 			<div class="panel panel-default">
 				<div class="panel-heading">
-					<i class="fa fa-list"></i> Lista de Visitantes
+					<i class="fa fa-list"></i> Lista de Inventario
 					<div class="pull-right">
 						<div class="btn-group">
 							<button type="button" class="btn btn-success btn-xs" data-toggle="modal" data-target="#modal" id="x">
-								Adicionar Visitente <span class="fa fa-plus" aria-hidden="true"></span>
+								Adicionar Elemento <span class="fa fa-plus" aria-hidden="true"></span>
 							</button>
 						</div>
 					</div>
 				</div>
 				<div class="panel-body">
-					<ul class="nav nav-pills">
-						<li <?php if($state == 1){ echo "class='active'";} ?>><a href="<?php echo base_url("settings/visitors/1"); ?>">Visitantes Activos</a>
-						</li>
-						<li <?php if($state == 2){ echo "class='active'";} ?>><a href="<?php echo base_url("settings/visitors/2"); ?>">Visitantes Inactivos</a>
-						</li>
-					</ul>
-					<br>
 					<?php
 						$retornoExito = $this->session->flashdata('retornoExito');
 						if ($retornoExito) {
@@ -62,48 +55,41 @@
 					<table width="100%" class="table table-striped table-bordered table-hover small" id="dataTables">
 						<thead>
 							<tr>
-								<th class="text-center">N° Documento</th>
-								<th class="text-center">Tipo Documento</th>
-								<th class="text-center">Nombre Visitante</th>
-								<th class="text-center">Ocupacion</th>
-								<th class="text-center">Celular</th>
+								<th class="text-center">N°</th>
+								<th class="text-center">Elemento</th>
+								<th class="text-center">Descripción</th>
+								<th class="text-center">Marca</th>
+								<th class="text-center">Placa</th>
+								<th class="text-center">Fecha Ingreso</th>
+								<th class="text-center">Fecha Servicio</th>
+								<th class="text-center">Valor</th>
 								<th class="text-center">Estado</th>
 								<th class="text-center">Opciones</th>
 							</tr>
 						</thead>
 						<tbody>
 						<?php
+							$i = 1;
 							foreach ($info as $lista):
 								echo "<tr>";
-								echo "<td class='text-right'>" . $lista['numero_documento'] . "</td>";
-								echo "<td>" . $lista['tipo_documento'] . "</td>";
-								echo "<td>" . $lista['nombres'] . ' ' . $lista['apellidos'] . "</td>";
-								echo "<td>" . $lista['ocupacion'] . "</td>";
-								echo "<td class='text-right'>" . $lista["telefono"] . "</td>";
-								echo "<td class='text-center'>";
-								switch ($lista['state']) {
-									case 1:
-										$valor = 'Activo';
-										$clase = "text-success";
-										break;
-									case 2:
-										$valor = 'Inactivo';
-										$clase = "text-danger";
-										break;
-								}
-								echo '<p class="' . $clase . '"><strong>' . $valor . '</strong></p>';
-								echo "</td>";
+								echo '<td class="text-center">' . $i . '</td>';
+								echo "<td>" . $lista['elemento'] . "</td>";
+								echo "<td>" . $lista['descripcion'] . "</td>";
+								echo "<td>" . $lista['marca'] . "</td>";
+								echo "<td class='text-right'>" . $lista['placa'] . "</td>";
+								echo "<td class='text-center'>" . $lista["fecha_ingreso"] . "</td>";
+								echo "<td class='text-center'>" . $lista["fecha_servicio"] . "</td>";
+								echo "<td class='text-right'>" . '$ ' . $lista["valor"] . "</td>";
+								echo "<td class='text-center'>" . $lista['estado'] . "</td>";
 								echo "<td class='text-center'>";
 								?>
-									<button type="button" class="btn btn-success btn-xs" data-toggle="modal" data-target="#modal" id="<?php echo $lista['id_visitante']; ?>" >
+									<button type="button" class="btn btn-success btn-xs" data-toggle="modal" data-target="#modal" id="<?php echo $lista['id_inventario']; ?>" >
 										Editar <span class="fa fa-pencil-square-o" aria-hidden="true">
-									</button>&nbsp;
-									<button type="button" class="btn btn-primary btn-xs" <?php if(!empty($lista['permiso']) || $lista['state'] == 2) { echo 'disabled'; } ?> onclick="<?php if(empty($lista['permiso'])) { echo 'window.location.href=\'' . base_url('entrances/generateAccess/' . $lista['numero_documento']) . '\''; } ?>">
-									    Generar <span class="fa fa-qrcode" aria-hidden="true"></span>
 									</button>
 								<?php
 								echo "</td>";
-							echo "</tr>";
+								echo "</tr>";
+								$i++;
 							endforeach;
 						?>
 						</tbody>

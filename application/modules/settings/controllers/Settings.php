@@ -68,9 +68,9 @@ class Settings extends CI_Controller {
 		header('Content-Type: application/json');
 		$data = array();
 		$idUser = $this->input->post('hddId');
-		$msj = "Se adicionó un nuevo Usuario!";
+		$msj = "Se adicionó un nuevo usuario!";
 		if ($idUser != '') {
-			$msj = "Se actualizó el Usuario!";
+			$msj = "Se actualizó el usuario!";
 		}
 		$num_doc = $this->input->post('numeroDocumento');
 		$log_user = $this->input->post('user');
@@ -139,9 +139,9 @@ class Settings extends CI_Controller {
 		header('Content-Type: application/json');
 		$data = array();
 		$idUser = $this->input->post('hddId');
-		$msj = "Se adicionó un nuevo Usuario!";
+		$msj = "Se adicionó un nuevo usuario!";
 		if ($idUser != '') {
-			$msj = "Se actualizó el Usuario!";
+			$msj = "Se actualizó el usuario!";
 		}
 		$num_doc = $this->input->post('numeroDocumento');
 		$log_user = $this->input->post('user');
@@ -332,9 +332,9 @@ class Settings extends CI_Controller {
 		header('Content-Type: application/json');
 		$data = array();
 		$idVisitor = $this->input->post('hddId');
-		$msj = "Se adicionó un nuevo Visitante!";
+		$msj = "Se adicionó un nuevo visitante!";
 		if ($idVisitor != '') {
-			$msj = "Se actualizó el Visitante!";
+			$msj = "Se actualizó el visitante!";
 		}
 		$num_doc = $this->input->post('numeroDocumento');
 		$arrParam = array(
@@ -347,9 +347,8 @@ class Settings extends CI_Controller {
 		if ($idVisitor == '') {
 			$data["state"] = 1;
 		}
-		$data["result"] = "error";
-		if($result_documento)
-		{
+		if($result_documento) {
+			$data["result"] = "error";
 			$data["mensaje"] = " Error. El número de documento ya existe.";
 		} else {
 			if ($this->settings_model->saveVisitor()) {
@@ -362,6 +361,256 @@ class Settings extends CI_Controller {
 		}
 		echo json_encode($data);
 	}
+
+	/**
+	 * Listado Inventario
+	 */
+	public function inventory()
+	{
+		$idUser = $this->session->userdata("id");
+		$arrParam = array(
+			"idUser" => $idUser
+		);
+		$data['info'] = $this->general_model->get_inventory($arrParam);
+		$data["view"] = 'inventory';
+		$this->load->view("layout_calendar", $data);
+	}
+
+	/**
+     * Formulario Inventario
+     */
+    public function cargarModalInventory() 
+	{
+		header("Content-Type: text/plain; charset=utf-8");
+		$data['information'] = FALSE;
+		$data["idInventario"] = $this->input->post("idInventario");
+		$arrParam = array(
+			"table" => "param_elementos",
+			"order" => "elemento",
+			"id" => "x"
+		);
+		$data['elementos'] = $this->general_model->get_basic_search($arrParam);
+		$arrParam = array(
+			"table" => "param_marcas",
+			"order" => "marca",
+			"id" => "x"
+		);
+		$data['marcas'] = $this->general_model->get_basic_search($arrParam);
+		$arrParam = array(
+			"table" => "param_estados",
+			"order" => "estado",
+			"id" => "x"
+		);
+		$data['estados'] = $this->general_model->get_basic_search($arrParam);
+		if ($data["idInventario"] != 'x') {
+			$arrParam = array(
+				"table" => "inventario",
+				"order" => "id_inventario",
+				"column" => "id_inventario",
+				"id" => $data["idInventario"]
+			);
+			$data['information'] = $this->general_model->get_basic_search($arrParam);
+		}
+		$this->load->view("inventory_modal", $data);
+    }
+
+    /**
+	 * Guardar Inventario
+	 */
+	public function save_inventory()
+	{
+		header('Content-Type: application/json');
+		$data = array();
+		$idInventario = $this->input->post('hddId');
+		$msj = "Se adicionó un nuevo elemento al inventario!";
+		if ($idInventario != '') {
+			$msj = "Se actualizó el elemento del inventario!";
+		}
+		$placa = $this->input->post('placa');
+		$arrParam = array(
+			"idInventario" => $idInventario,
+			"column" => "placa",
+			"value" => $placa
+		);
+		$result_placa = $this->settings_model->verifyInventory($arrParam);
+		if($result_placa) {
+			$data["result"] = "error";
+			$data["mensaje"] = " Error. El número de placa ya existe.";
+		} else {
+			if ($this->settings_model->saveInventory()) {
+				$data["result"] = true;
+				$this->session->set_flashdata('retornoExito', '<strong>Correcto!</strong> ' . $msj);
+			} else {
+				$data["result"] = "error";
+				$this->session->set_flashdata('retornoError', '<strong>Error!</strong> Ask for help');
+			}
+		}
+		echo json_encode($data);
+	}
+
+	/**
+	 * Listado Elementos
+	 */
+	public function elements()
+	{
+		$arrParam = array(
+			"table" => "param_elementos",
+			"order" => "elemento",
+			"id" => "x"
+		);
+		$data['elemento'] = $this->general_model->get_basic_search($arrParam);
+		$data["view"] = 'elements';
+		$this->load->view("layout_calendar", $data);
+	}
+
+	/**
+     * Formulario Elemento
+     */
+    public function cargarModalElements() 
+	{
+		header("Content-Type: text/plain; charset=utf-8");
+		$data['information'] = "";
+		$data["idElemento"] = $this->input->post("idElemento");
+		if ($data["idElemento"] != 'x') {
+			$arrParam = array(
+				"table" => "param_elementos",
+				"order" => "id_elemento",
+				"column" => "id_elemento",
+				"id" => $data["idElemento"]
+			);
+			$data['information'] = $this->general_model->get_basic_search($arrParam);
+		}
+		$this->load->view("elements_modal", $data);
+    }
+
+    /**
+	 * Guardar Elemento
+	 */
+	public function save_element()
+	{
+		header('Content-Type: application/json');
+		$data = array();
+		$idElemento = $this->input->post('hddId');
+		$msj = "Se adicionó un nuevo elemento!";
+		if ($idElemento != '') {
+			$msj = "Se actualizó el elemento!";
+		}
+		if ($this->settings_model->saveElement()) {
+			$data["result"] = true;
+			$this->session->set_flashdata('retornoExito', '<strong>Correcto!</strong> ' . $msj);
+		} else {
+			$data["result"] = "error";
+			$this->session->set_flashdata('retornoError', '<strong>Error!</strong> Ask for help');
+		}
+		echo json_encode($data);
+	}
+
+	/**
+	 * Eliminar Elemento
+	 */
+	public function delete_element()
+	{			
+		header('Content-Type: application/json');
+		$data = array();
+		$idElemento = $this->input->post('identificador');
+		$arrParam = array(
+			"table" => "param_elementos",
+			"primaryKey" => "id_elemento",
+			"id" => $idElemento
+		);
+		if ($this->general_model->deleteRecord($arrParam)) 
+		{
+			$data["result"] = true;
+			$this->session->set_flashdata('retornoExito', '<strong>Correcto!</strong> Has eliminado el elemento.');
+		} else {
+			$data["result"] = "error";
+			$data["mensaje"] = "Error!!! Ask for help.";
+			$this->session->set_flashdata('retornoError', '<strong>Error!</strong> Ask for help');
+		}
+		echo json_encode($data);
+    }
+
+    /**
+	 * Listado Marcas
+	 */
+	public function marks()
+	{
+		$arrParam = array(
+			"table" => "param_marcas",
+			"order" => "marca",
+			"id" => "x"
+		);
+		$data['marcas'] = $this->general_model->get_basic_search($arrParam);
+		$data["view"] = 'marks';
+		$this->load->view("layout_calendar", $data);
+	}
+
+	/**
+     * Formulario Marca
+     */
+    public function cargarModalMarks() 
+	{
+		header("Content-Type: text/plain; charset=utf-8");
+		$data['information'] = "";
+		$data["idMarca"] = $this->input->post("idMarca");
+		if ($data["idMarca"] != 'x') {
+			$arrParam = array(
+				"table" => "param_marcas",
+				"order" => "id_marca",
+				"column" => "id_marca",
+				"id" => $data["idMarca"]
+			);
+			$data['information'] = $this->general_model->get_basic_search($arrParam);
+		}
+		$this->load->view("marks_modal", $data);
+    }
+
+    /**
+	 * Guardar Marca
+	 */
+	public function save_mark()
+	{
+		header('Content-Type: application/json');
+		$data = array();
+		$idMarca = $this->input->post('hddId');
+		$msj = "Se adicionó una nueva marca!";
+		if ($idMarca != '') {
+			$msj = "Se actualizó la marca!";
+		}
+		if ($this->settings_model->saveMark()) {
+			$data["result"] = true;
+			$this->session->set_flashdata('retornoExito', '<strong>Correcto!</strong> ' . $msj);
+		} else {
+			$data["result"] = "error";
+			$this->session->set_flashdata('retornoError', '<strong>Error!</strong> Ask for help');
+		}
+		echo json_encode($data);
+	}
+
+	/**
+	 * Eliminar Marca
+	 */
+	public function delete_mark()
+	{			
+		header('Content-Type: application/json');
+		$data = array();
+		$idMarca = $this->input->post('identificador');
+		$arrParam = array(
+			"table" => "param_marcas",
+			"primaryKey" => "id_marca",
+			"id" => $idMarca
+		);
+		if ($this->general_model->deleteRecord($arrParam))
+		{
+			$data["result"] = true;
+			$this->session->set_flashdata('retornoExito', '<strong>Correcto!</strong> Has eliminado la marca.');
+		} else {
+			$data["result"] = "error";
+			$data["mensaje"] = "Error!!! Ask for help.";
+			$this->session->set_flashdata('retornoError', '<strong>Error!</strong> Ask for help');
+		}
+		echo json_encode($data);
+    }
 
 	/**
 	 * Listado Ocupaciones
@@ -406,9 +655,9 @@ class Settings extends CI_Controller {
 		header('Content-Type: application/json');
 		$data = array();
 		$idOcupacion = $this->input->post('hddId');
-		$msj = "Se adicionó una nueva Ocupación!";
+		$msj = "Se adicionó una nueva ocupación!";
 		if ($idOcupacion != '') {
-			$msj = "Se actualizó la Ocupación!";
+			$msj = "Se actualizó la ocupación!";
 		}
 		if ($this->settings_model->saveOccupation()) {
 			$data["result"] = true;
@@ -488,9 +737,9 @@ class Settings extends CI_Controller {
 		header('Content-Type: application/json');
 		$data = array();
 		$idSede = $this->input->post('hddId');
-		$msj = "Se adicionó una nueva Sede!";
+		$msj = "Se adicionó una nueva sede!";
 		if ($idSede != '') {
-			$msj = "Se actualizó la Sede!";
+			$msj = "Se actualizó la sede!";
 		}
 		if ($this->settings_model->saveSede()) {
 			$data["result"] = true;
@@ -570,9 +819,9 @@ class Settings extends CI_Controller {
 		header('Content-Type: application/json');
 		$data = array();
 		$idTipo = $this->input->post('hddId');
-		$msj = "Se adicionó un nuevo Tipo de Documento!";
+		$msj = "Se adicionó un nuevo tipo de documento!";
 		if ($idTipo != '') {
-			$msj = "Se actualizó el Tipo de Documento!";
+			$msj = "Se actualizó el tipo de documento!";
 		}
 		if ($this->settings_model->saveDocumentType()) {
 			$data["result"] = true;
