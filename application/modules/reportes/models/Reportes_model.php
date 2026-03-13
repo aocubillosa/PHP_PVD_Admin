@@ -3,18 +3,19 @@
 class Reportes_model extends CI_Model {
 
 	/**
-	 * Consulta Turnos
+	 * Consulta Ingresos
 	 */
 	public function get_ingresos($arrData)
 	{
 		$this->db->select();
-		$this->db->join('ingresos I', 'I.fk_id_visitante = V.id_visitante', 'INNER');
+		$this->db->join('visitantes V', 'V.id_visitante = I.fk_id_visitante', 'INNER');
 		$this->db->join('param_tipo_documento D', 'D.id_tipo_documento = V.fk_id_tipo_documento', 'INNER');
 		$this->db->join('param_ocupacion O', 'O.id_ocupacion = V.fk_id_ocupacion', 'INNER');
 		$this->db->where('V.state', 1);
+		$this->db->where('I.fk_id_user', $arrData["idUser"]);
 		$this->db->where('I.fecha_ingreso BETWEEN "'. $arrData["from"] .'" AND "'. $arrData["to"] .'"');
 		$this->db->order_by('I.id_ingreso ASC');
-		$query = $this->db->get('visitantes V');
+		$query = $this->db->get('ingresos I');
 		if ($query->num_rows() > 0) {
 			return $query->result_array();
 		} else {
@@ -22,6 +23,9 @@ class Reportes_model extends CI_Model {
 		}
 	}
 
+	/**
+	 * Consulta Inventario
+	 */
 	public function get_inventario($arrData)
 	{
 		$this->db->select();

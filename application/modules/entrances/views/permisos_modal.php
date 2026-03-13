@@ -58,6 +58,7 @@
 				</div>
 			</div>
 		</div>
+		<br>
 		<div class="form-group">
 			<div class="row" align="center">
 				<div style="width:50%;" align="center">

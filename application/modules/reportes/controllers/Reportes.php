@@ -25,11 +25,12 @@ class Reportes extends CI_Controller {
 	 */
 	public function entrances()
 	{
-		$from = date('Y-m-d');
-		$to = date('Y-m-d');
+		$fecha = date('Y-m-d');
+		$idUser = $this->session->userdata("id");
 		$arrParam = array(
-			'from' => $from . ' 00:00:00',
-			'to' => $to . ' 23:59:59'
+			'idUser' => $idUser,
+			'from' => $fecha . ' 00:00:00',
+			'to' => $fecha . ' 23:59:59'
 		);
 		$data['listaIngresos'] = $this->reportes_model->get_ingresos($arrParam);
 		$data['noIngresosHOY'] = $data['listaIngresos']?count($data['listaIngresos']):0;
@@ -42,6 +43,7 @@ class Reportes extends CI_Controller {
 		$domingo = date('Y-m-d', $domingo);
 		$domingo = date('Y-m-d',strtotime ('+1 day ', strtotime($domingo)));
 		$arrParam = array(
+			'idUser' => $idUser,
 			'from' => $lunes,
 			'to' => $domingo
 		);
@@ -53,6 +55,7 @@ class Reportes extends CI_Controller {
 		$month_end = date('Y-m-d', $month_end);
 		$month_end = date('Y-m-d',strtotime ('+1 day ', strtotime($month_end)));
 		$arrParam = array(
+			'idUser' => $idUser,
 			'from' => $month_start,
 			'to' => $month_end
 		);
@@ -78,7 +81,9 @@ class Reportes extends CI_Controller {
 	{
 		$data['from'] = $this->input->post('from');
 		$data['to'] = $this->input->post('to');
+		$idUser = $this->session->userdata("id");
 		$arrParam = array(
+			'idUser' => $idUser,
 			'from' => $data['from'] . ' 00:00:00',
 			'to' => $data['to'] . ' 23:59:59'
 		);
@@ -101,8 +106,10 @@ class Reportes extends CI_Controller {
 		$sedes = $this->general_model->get_basic_search($arrParam);
 		$from = $this->input->post('from');
 		$to = $this->input->post('to');
+		$idUser = $this->session->userdata("id");
 		$nombreArchivo = 'reporte_asistencias_' . $from . '_' . $to . '.xlsx';
 		$arrParam = array(
+			'idUser' => $idUser,
 			'from' => $from . ' 00:00:00',
 			'to' => $to . ' 23:59:59'
 		);
@@ -226,8 +233,10 @@ class Reportes extends CI_Controller {
         $sedes = $this->general_model->get_basic_search($arrParam);
         $from = $this->input->post('from');
         $to = $this->input->post('to');
+        $idUser = $this->session->userdata("id");
         $nombreArchivo = 'reporte_asistencias_' . $from . '_' . $to . '.pdf';
         $arrParam = array(
+        	'idUser' => $idUser,
             'from' => $from . ' 00:00:00',
             'to' => $to . ' 23:59:59'
         );

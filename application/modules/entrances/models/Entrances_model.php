@@ -26,12 +26,10 @@ class Entrances_model extends CI_Model {
 	 */
 	public function saveAccess($data_qr)
 	{
-		$idUser = $this->session->userdata("id");
 		$idVisitante = $this->input->post('hddId');
 		$rutaImagen = $data_qr['rutaImagen'];
 		$llave = $data_qr['llave'];
 		$data = array(
-			'fk_id_user' => $idUser,
 			'fk_id_visitante' => $idVisitante,
 			'qr_code_img_doc' => $rutaImagen,
 			'qr_code_llave_doc' => $llave,
@@ -114,12 +112,14 @@ class Entrances_model extends CI_Model {
 		$fecha = date('Y-m-d');
 		$fecha_inicio = $fecha . ' 00:00:00';
 		$fecha_final = $fecha . ' 23:59:59';
+		$idUser = $this->session->userdata("id");
 		$this->db->select();
-		$this->db->join('ingresos I', 'I.fk_id_visitante = V.id_visitante', 'INNER');
+		$this->db->join('visitantes V', 'V.id_visitante = I.fk_id_visitante', 'INNER');
 		$this->db->where('V.id_visitante', $id_visitante);
 		$this->db->where('V.state', 1);
+		$this->db->where('I.fk_id_user', $idUser);
 		$this->db->where("I.fecha_ingreso BETWEEN '$fecha_inicio' AND '$fecha_final'");
-		$query = $this->db->get("visitantes V");
+		$query = $this->db->get("ingresos I");
 		if ($query->num_rows() > 0) {
 			return $query->row_array();
 		} else {

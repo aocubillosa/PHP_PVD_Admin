@@ -28,6 +28,8 @@ class Dashboard extends CI_Controller {
 		$data['visitantes'] = $visitantes;
 		$inventario = $this->dashboard_model->elementos_inventario();
 		$data['inventario'] = $inventario;
+		$ingresos = $this->dashboard_model->get_ingresos();
+		$data['ingresos'] = $ingresos;
 		$data["view"] = "dashboard";
 		$this->load->view("layout_calendar", $data);
 	}

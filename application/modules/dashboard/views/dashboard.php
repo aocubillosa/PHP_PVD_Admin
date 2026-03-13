@@ -6,10 +6,10 @@
         box-shadow: 0 4px 8px rgba(0,0,0,0.1);
         transition: all 0.3s ease;
     }
-    .panel-primary:hover {
+    .panel-blue:hover {
         cursor: pointer;
-        background-color: #cce7ff;
-        border-color: #b3d9ff;
+        background-color: #337ab7;
+        border-color: #337ab7;
         box-shadow: 0 4px 8px rgba(0,0,0,0.1);
         transition: all 0.3s ease;
     }
@@ -75,7 +75,7 @@
             </div>
         </div>
         <div class="col-lg-2 col-md-4">
-            <div class="panel panel-primary" id="panel-inventario">
+            <div class="panel panel-blue" id="panel-inventario">
                 <div class="panel-heading">
                     <div class="row">
                         <div class="col-xs-3">
@@ -90,6 +90,50 @@
             </div>
         </div>
 	</div>
+    <br><br>
+    <div class="row">
+        <div class="col-lg-3"></div>
+        <div class="col-lg-6">
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <i class="fa fa-bar-chart fa-fw"></i> ESTADISTICAS
+                </div>
+                <div class="panel-body small">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th width="50%" class="text-center">ACTIVIDAD</th>
+                                <th width="50%" class="text-center">PORCENTAJE</th>
+                            </tr>
+                        </thead>
+                        <?php
+                            if ($visitantes == 0){
+                                $porcentaje = 0;
+                            } else {
+                                $porcentaje = ($ingresos * 100) / $visitantes;
+                            }
+                            if ($porcentaje > 70){
+                                $estilos = "progress-bar-success";
+                            } elseif ($porcentaje > 40 && $porcentaje <= 70){
+                                $estilos = "progress-bar-warning";
+                            } else {
+                                $estilos = "progress-bar-danger";
+                            }
+                            echo "<tr>";
+                            echo "<td>INGRESOS</td>";
+                            echo "<td class='text-center'>";
+                            echo "<b>" . number_format($porcentaje, 2) ."%</b>";
+                            echo '<div class="progress progress-striped">
+                                      <div class="progress-bar ' . $estilos . '" role="progressbar" style="width: '. number_format($porcentaje, 2) .'%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">' . number_format($porcentaje, 2) . '%</div>
+                                    </div>';
+                            echo "</td>";
+                            echo "</tr>";
+                        ?>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
 <script>
